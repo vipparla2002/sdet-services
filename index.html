@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- GitHub Pages cannot set response headers, so the CSP lives here. Inline styles stay allowed for the style="--i:n" animation offsets; scripts must come from this origin.
+     Third parties allowed: Formspree (contact form) and Cloudflare Web Analytics (only loaded when a token is set below). Fonts are self-hosted. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://formspree.io https://cloudflareinsights.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Greenbar Quality Engineering | Freelance SDET &amp; Test Automation</title>
+<meta name="description" content="Freelance SDET and test automation engineering: Playwright and Selenium frameworks, API testing with Playwright, Postman and REST Assured, Apache JMeter performance testing, CI/CD quality gates, with AI built into the testing workflow. 3 years of experience, working remotely. Free 30-minute test audit call.">
+<!-- __SITE_URL__ is replaced with the deployed address by CI (see .github/workflows/ci.yml). Search and social crawlers need absolute URLs. -->
+<link rel="canonical" href="__SITE_URL__/">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0d7a55">
+<!-- Cookieless visitor stats: paste your Cloudflare Web Analytics site token here (dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site). Empty = no analytics. -->
+<meta name="cf-analytics-token" content="">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Greenbar Quality Engineering">
+<meta property="og:title" content="Releases you can ship on a green bar, not a gut feeling">
+<meta property="og:description" content="Freelance SDET: automation frameworks, API testing, performance testing, CI quality gates and AI-assisted test engineering. 3 years of experience, fully remote.">
+<meta property="og:url" content="__SITE_URL__/">
+<meta property="og:image" content="__SITE_URL__/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Greenbar Quality Engineering: a CI run showing 148 passed, 0 failed">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Structured data: lets search engines show this as a professional service with its offers. Not executed, so the CSP does not apply. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Greenbar Quality Engineering",
+  "description": "Freelance SDET and test automation engineering: Playwright and Selenium frameworks, API testing, Apache JMeter performance testing, CI/CD quality gates and AI-assisted test engineering. 3 years of experience, working fully remotely.",
+  "url": "__SITE_URL__/",
+  "image": "__SITE_URL__/assets/og-image.png",
+  "sameAs": ["https://github.com/vipparla2002"],
+  "areaServed": "Worldwide",
+  "serviceType": "Software test automation",
+  "knowsAbout": ["Playwright", "Selenium", "Postman", "REST Assured", "Apache JMeter", "TypeScript", "Python", "C#", ".NET", "Node.js", "GitHub Actions", "Azure DevOps", "Azure Test Plans", "Allure", "ExtentReports", "Jira", "Claude", "GitHub Copilot", "Model Context Protocol", "Ollama"],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Engagements",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Test audit", "description": "Two-week review of your quality setup with written findings, a risk map and a 90-day roadmap." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Framework build", "description": "Six to ten weeks to build a production-ready automation framework wired into CI." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Embedded SDET", "description": "Monthly part-time or full-time SDET capacity inside your sprints." } }
+    ]
+  }
+}
+</script>
+<link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Self-hosted latin subsets, copied from @fontsource by `npm run fonts`. */
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(assets/fonts/bricolage-grotesque-latin-opsz-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url(assets/fonts/ibm-plex-sans-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url(assets/fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 600; font-display: swap; src: url(assets/fonts/jetbrains-mono-latin-600-normal.woff2) format("woff2"); }
+
+/* Layout: a test report read top to bottom — run output as hero, then suites (services), stages (process), and a final "assertion" contact block. */
+:root {
+  --paper: #f6f8f7;
+  --surface: #ffffff;
+  --ink: #15201d;
+  --muted: #56645f;
+  --rule: #d9e1de;
+  --pass: #0d7a55;
+  --pass-soft: #e0f1ea;
+  --fail: #c2412d;
+  --skip: #a7740b;
+  --term-bg: #13201c;
+  --term-fg: #d6e5df;
+  --term-dim: #7f948c;
+  --term-pass: #5fd3a2;
+  --term-fail: #ff8a75;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1614; --surface: #16201d; --ink: #e4ece9; --muted: #9aaba5; --rule: #2a3733;
+    --pass: #4cc795; --pass-soft: #173129; --fail: #ff8a75; --skip: #e2b04a;
+    --term-bg: #0a100e; --term-fg: #d6e5df; --term-dim: #73877f; --term-pass: #5fd3a2; --term-fail: #ff8a75;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1614; --surface: #16201d; --ink: #e4ece9; --muted: #9aaba5; --rule: #2a3733;
+  --pass: #4cc795; --pass-soft: #173129; --fail: #ff8a75; --skip: #e2b04a;
+  --term-bg: #0a100e; --term-fg: #d6e5df; --term-dim: #73877f; --term-pass: #5fd3a2; --term-fail: #ff8a75;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--pass); outline-offset: 3px; border-radius: 4px; }
+/* Keep in-page jump targets clear of the sticky header (WCAG 2.4.11 focus not obscured) */
+main, section[id] { scroll-margin-top: 4.5rem; }
+main:focus { outline: none; }
+.skip { position: absolute; left: 16px; top: -100px; z-index: 20; padding: 0.6rem 1rem; border-radius: 6px; background: var(--ink); color: var(--paper); font-weight: 600; text-decoration: none; }
+.skip:focus { top: calc(env(safe-area-inset-top, 0px) + 8px); }
+
+.wrap {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pass);
+}
+
+/* Header */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+header.site {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.85rem; }
+.brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--display); font-weight: 800; font-size: 1.15rem; text-decoration: none; }
+.brand .bar { width: 1.6rem; height: 0.55rem; border-radius: 2px; background: var(--pass); }
+nav.links { display: flex; gap: 1.4rem; font-size: 0.92rem; }
+nav.links a { text-decoration: none; color: var(--muted); }
+nav.links a:hover { color: var(--ink); }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font: 600 0.95rem var(--body);
+  padding: 0.7rem 1.15rem; border-radius: 6px; border: 1px solid transparent;
+  text-decoration: none; cursor: pointer;
+}
+.btn.primary { background: var(--pass); color: var(--paper); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { border-color: var(--rule); color: var(--ink); background: transparent; }
+.btn.ghost:hover { border-color: var(--muted); }
+/* Small screens: the section links drop to their own row under the brand and scroll sideways if they overflow. */
+@media (max-width: 760px) {
+  header.site .wrap { flex-wrap: wrap; row-gap: 0.4rem; padding-block: 0.7rem 0.4rem; }
+  nav.links { order: 3; width: 100%; gap: 1.2rem; overflow-x: auto; scrollbar-width: none; }
+  nav.links a { white-space: nowrap; padding-block: 0.4rem; }
+  main, section[id] { scroll-margin-top: 7rem; }
+}
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 3rem; align-items: center; padding-block: 4.5rem 4rem; }
+.hero h1 { font-size: clamp(2.3rem, 5.2vw, 3.9rem); font-weight: 800; line-height: 1.04; margin-block: 0.9rem 1.2rem; }
+.hero h1 em { font-style: normal; color: var(--pass); }
+.hero .lede { font-size: 1.12rem; color: var(--muted); max-width: 34rem; }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.8rem; }
+.facts { display: flex; flex-wrap: wrap; gap: 0.8rem 2.2rem; margin: 1.9rem 0 0; }
+.facts div { display: grid; gap: 0.1rem; }
+.facts dt { font: 700 1.55rem/1.1 var(--display); color: var(--ink); }
+.facts dd { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.roles { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.6rem 0 0; padding: 0; list-style: none; }
+.roles li { font: 500 0.8rem var(--mono); padding: 0.25rem 0.6rem; border: 1px solid var(--rule); border-radius: 999px; color: var(--muted); }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; padding-block: 3rem; } }
+
+/* Terminal */
+.term { margin: 0; min-width: 0; background: var(--term-bg); color: var(--term-fg); border-radius: 10px; overflow: hidden; box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.45); }
+.term-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.65rem 1rem; border-bottom: 1px solid rgb(255 255 255 / 0.08); font: 0.78rem var(--mono); color: var(--term-dim); }
+.term-head button { font: 600 0.75rem var(--mono); color: var(--term-pass); background: transparent; border: 1px solid rgb(95 211 162 / 0.4); border-radius: 4px; padding: 0.25rem 0.6rem; cursor: pointer; }
+.term-head button:hover { background: rgb(95 211 162 / 0.1); }
+.term pre { margin: 0; padding: 1rem 1.1rem 1.2rem; font: 0.82rem/1.75 var(--mono); overflow-x: auto; white-space: pre; }
+.term .l { display: block; }
+.term .d { color: var(--term-dim); }
+.term .ok { color: var(--term-pass); }
+.term .no { color: var(--term-fail); }
+.term .sum { display: block; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed rgb(255 255 255 / 0.12); }
+.term .greenbar { display: block; height: 6px; margin-top: 0.8rem; border-radius: 3px; background: var(--term-pass); transform-origin: left; }
+.term.running .l { opacity: 0; animation: show 0.01s forwards; animation-delay: calc(var(--i) * 140ms); }
+.term.running .greenbar { transform: scaleX(0); animation: grow 0.6s ease-out forwards; animation-delay: calc(var(--i) * 140ms); }
+@keyframes show { to { opacity: 1; } }
+@keyframes grow { to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .term.running .l, .term.running .greenbar { animation: none; opacity: 1; transform: none; } }
+
+/* Sections */
+section.block { padding-block: 4.5rem; border-top: 1px solid var(--rule); }
+.section-head { display: grid; grid-template-columns: 1fr 1.3fr; gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
+.section-head h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 700; line-height: 1.1; margin-top: 0.5rem; }
+.section-head p { color: var(--muted); max-width: 38rem; }
+@media (max-width: 760px) { .section-head { grid-template-columns: 1fr; gap: 1rem; } }
+
+/* Services as test suites */
+.suites { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.suite { background: var(--surface); padding: 1.6rem 1.5rem 1.7rem; display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; }
+.suite .tag { font: 0.74rem var(--mono); color: var(--muted); display: flex; align-items: center; gap: 0.45rem; }
+.suite .tag::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--pass); }
+.suite h3 { font-size: 1.3rem; font-weight: 700; }
+.suite p { color: var(--muted); font-size: 0.95rem; }
+.suite ul { list-style: none; padding: 0; margin: 0.25rem 0 0; display: grid; gap: 0.35rem; font-size: 0.9rem; }
+.suite li { display: flex; gap: 0.5rem; }
+.suite li::before { content: "✓"; color: var(--pass); font-weight: 600; }
+.suite .stack { margin-top: auto; padding-top: 0.6rem; font: 0.76rem var(--mono); color: var(--muted); }
+@media (max-width: 960px) { .suites { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .suites { grid-template-columns: 1fr; } }
+
+/* Pyramid */
+.pyramid-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.pyramid { display: grid; gap: 6px; max-width: 30rem; width: 100%; justify-self: center; }
+.tier { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 1.2rem; margin-inline: auto; border-radius: 4px; font-size: 0.92rem; }
+.tier b { font-family: var(--display); font-weight: 700; }
+.tier span { font: 0.78rem var(--mono); font-variant-numeric: tabular-nums; }
+.tier.ui { width: 46%; background: var(--pass-soft); color: var(--ink); }
+.tier.api { width: 72%; background: color-mix(in srgb, var(--pass) 45%, var(--pass-soft)); color: var(--ink); }
+.tier.unit { width: 100%; background: var(--pass); color: var(--paper); }
+.pyramid-notes { display: grid; gap: 1.2rem; }
+.pyramid-notes div { display: grid; gap: 0.25rem; }
+.pyramid-notes h3 { font-size: 1.05rem; font-weight: 700; }
+.pyramid-notes p { color: var(--muted); font-size: 0.95rem; }
+@media (max-width: 860px) { .pyramid-wrap { grid-template-columns: 1fr; } .tier.ui { width: 62%; } .tier.api { width: 82%; } }
+
+/* Engagements */
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.plan { border: 1px solid var(--rule); border-radius: 10px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; background: var(--surface); min-width: 0; }
+.plan.featured { border-color: var(--pass); box-shadow: 0 0 0 1px var(--pass); }
+.plan .dur { font: 600 0.8rem var(--mono); color: var(--pass); }
+.plan h3 { font-size: 1.35rem; font-weight: 700; }
+.plan p { color: var(--muted); font-size: 0.95rem; }
+.plan dl { margin: 0; display: grid; gap: 0.55rem; font-size: 0.9rem; }
+.plan dt { font: 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.plan dd { margin: 0; }
+.plan .btn { margin-top: auto; align-self: flex-start; }
+
+
+/* Work: anonymised case studies */
+.cases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.case { border: 1px solid var(--rule); border-radius: 10px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; background: var(--surface); min-width: 0; }
+.case .ctx { font: 600 0.78rem var(--mono); color: var(--pass); }
+.case h3 { font-size: 1.2rem; font-weight: 700; }
+.case dl { margin: 0; display: grid; gap: 0.7rem; font-size: 0.92rem; }
+.case dt { font: 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.case dd { margin: 0.15rem 0 0; }
+@media (max-width: 900px) { .cases { grid-template-columns: 1fr; } }
+.selftest { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem 2rem; margin-top: 1.25rem; padding: 1.5rem 1.6rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+.selftest > div:first-child { display: grid; gap: 0.45rem; max-width: 40rem; }
+.selftest .ctx { font: 600 0.78rem var(--mono); color: var(--pass); }
+.selftest h3 { font-size: 1.2rem; font-weight: 700; }
+.selftest p { color: var(--muted); font-size: 0.95rem; }
+.selftest-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+/* Entry offer above the plans */
+.starter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem 2rem; padding: 1.4rem 1.6rem; margin-bottom: 1.25rem; border: 1px dashed var(--pass); border-radius: 10px; background: var(--pass-soft); }
+.starter div:first-child { display: grid; gap: 0.4rem; max-width: 44rem; }
+.starter h3 { font-size: 1.25rem; font-weight: 700; }
+.starter p { color: var(--muted); font-size: 0.95rem; }
+.starter .dur { font: 600 0.8rem var(--mono); color: var(--pass); }
+.starter-cta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+/* FAQ */
+.faq { display: grid; gap: 0.6rem; max-width: 52rem; }
+.faq details { border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+.faq summary { cursor: pointer; padding: 0.95rem 1.2rem; font-weight: 600; list-style-position: inside; }
+.faq details[open] summary { border-bottom: 1px solid var(--rule); }
+.faq details p { padding: 0.9rem 1.2rem 1.1rem; color: var(--muted); }
+
+/* What happens after you get in touch */
+.next { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 0.75rem; counter-reset: next; }
+.next li { counter-increment: next; display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.7rem; align-items: start; color: var(--muted); font-size: 0.95rem; }
+.next li::before { content: counter(next); display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--pass-soft); color: var(--pass); font: 600 0.85rem var(--mono); }
+.next b { color: var(--ink); font-weight: 600; }
+@media (max-width: 900px) { .plans { grid-template-columns: 1fr; } }
+
+/* Process */
+.stages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; counter-reset: stage; }
+.stages li { counter-increment: stage; padding: 1.2rem 1.4rem 0 0; border-top: 3px solid var(--rule); position: relative; display: grid; gap: 0.45rem; align-content: start; }
+.stages li::before { content: "stage " counter(stage); font: 0.74rem var(--mono); color: var(--muted); }
+.stages li::after { content: ""; position: absolute; top: -3px; left: 0; width: 2.5rem; height: 3px; background: var(--pass); }
+.stages h3 { font-size: 1.15rem; font-weight: 700; }
+.stages p { color: var(--muted); font-size: 0.93rem; }
+@media (max-width: 860px) { .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2rem; } }
+@media (max-width: 520px) { .stages { grid-template-columns: 1fr; } }
+
+/* Toolbelt */
+.tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1.5rem 2rem; }
+.tools div { display: grid; gap: 0.5rem; align-content: start; }
+.tools h3 { font: 0.74rem var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.chips span { font-size: 0.86rem; padding: 0.3rem 0.65rem; border-radius: 5px; background: var(--surface); border: 1px solid var(--rule); }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3rem; align-items: start; }
+.contact .side { display: grid; gap: 1.2rem; }
+.contact .side p { color: var(--muted); }
+form.brief { display: grid; gap: 1rem; padding: 1.6rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); min-width: 0; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+label { display: grid; gap: 0.35rem; font-size: 0.86rem; font-weight: 500; }
+input, select, textarea {
+  font: 0.95rem var(--body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem 0.7rem; width: 100%;
+}
+textarea { min-height: 7rem; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--pass); outline-offset: 0; border-color: transparent; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
+legend { font-size: 0.86rem; font-weight: 500; margin-bottom: 0.4rem; }
+.checks { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.checks label { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 400; padding: 0.35rem 0.65rem; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
+.checks input { width: auto; accent-color: var(--pass); }
+.checks label:has(input:checked) { border-color: var(--pass); background: var(--pass-soft); }
+.result { font: 0.85rem/1.6 var(--mono); padding: 0.9rem 1rem; border-radius: 6px; background: var(--pass-soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+.result.err { background: color-mix(in srgb, var(--fail) 14%, var(--surface)); color: var(--ink); }
+@media (max-width: 860px) { .contact { grid-template-columns: 1fr; } }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+footer { border-top: 1px solid var(--rule); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-block: 2rem; font-size: 0.85rem; color: var(--muted); }
+footer .mono { font-family: var(--mono); }
+footer .elsewhere { display: flex; gap: 1.2rem; }
+footer .elsewhere a { padding-block: 0.2rem; }
+.fine { font-size: 0.85rem; color: var(--muted); }
+section.privacy { padding-block: 3rem; }
+.privacy h2 { font-size: 1.4rem; margin-bottom: 0.8rem; }
+.privacy p { max-width: 46rem; color: var(--muted); margin-bottom: 0.6rem; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#main"><span class="bar" aria-hidden="true"></span>Greenbar</a>
+    <nav class="links" aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#work">Work</a>
+      <a href="#engagements">Engagements</a>
+      <a href="#tools">Toolbelt</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn primary" href="#contact">Start a project</a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">SDET · Test Automation · AI-integrated QA</span>
+        <h1>Releases you can ship on a <em>green bar</em>, not a gut feeling.</h1>
+        <p class="lede">I design, build and maintain automated test suites for web applications and APIs, with AI built into every step from writing tests to fixing them, then wire them into your pipeline so every merge tells you whether it is safe to release.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#contact">Book a free test audit call</a>
+          <a class="btn ghost" href="#services">See services</a>
+        </div>
+        <dl class="facts">
+          <div><dt>3 years</dt><dd>in test automation</dd></div>
+          <div><dt>2.5 years</dt><dd>working fully remote</dd></div>
+          <div><dt>2 stacks</dt><dd>.NET and TypeScript</dd></div>
+        </dl>
+        <ul class="roles" aria-label="Roles I fill">
+          <li>SDET</li><li>Automation Engineer</li><li>Performance Tester</li><li>API Test Engineer</li><li>AI-assisted QA</li>
+        </ul>
+      </div>
+
+      <figure class="term" id="term" aria-label="Sample CI test run output">
+        <div class="term-head">
+          <span>ci / regression · main@4f2c91a</span>
+          <button type="button" id="rerun">▶ Re-run</button>
+        </div>
+<pre tabindex="0"><span class="l" style="--i:0"><span class="d">$</span> npx playwright test --project=chromium --shard=1/4</span>
+<span class="l" style="--i:1"><span class="d">Running 148 tests using 6 workers</span></span>
+<span class="l" style="--i:2"><span class="ok">  ✓</span> checkout/guest-checkout.spec.ts <span class="d">(3.1s)</span></span>
+<span class="l" style="--i:3"><span class="ok">  ✓</span> auth/sso-login.spec.ts <span class="d">(2.4s)</span></span>
+<span class="l" style="--i:4"><span class="ok">  ✓</span> api/orders.schema.spec.ts <span class="d">(0.9s)</span></span>
+<span class="l" style="--i:5"><span class="ok">  ✓</span> search/filters.spec.ts <span class="d">(4.6s)</span></span>
+<span class="l" style="--i:6"><span class="ok">  ✓</span> a11y/axe-core-scan.spec.ts <span class="d">(1.8s)</span></span>
+<span class="l" style="--i:7"><span class="d">  … 141 more</span></span>
+<span class="l sum" style="--i:8"><span class="ok">148 passed</span>  <span class="d">0 failed  0 flaky  ·  1m 52s</span></span>
+<span class="greenbar" style="--i:9" aria-hidden="true"></span></pre>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">describe("services")</span>
+          <h2>Six suites of work, one goal: trustworthy releases.</h2>
+        </div>
+        <p>Take one service on its own or combine them. Every engagement ends with code in your repository, documentation your team can follow, and a pipeline that runs without me.</p>
+      </div>
+
+      <div class="suites">
+        <article class="suite">
+          <span class="tag">framework</span>
+          <h3>Automation framework build</h3>
+          <p>A maintainable framework from scratch, or a rescue of one that has rotted.</p>
+          <ul><li>Page Object Model</li><li>Test data factories and fixtures</li><li>Parallel, sharded execution</li></ul>
+          <span class="stack">Playwright · Selenium</span>
+        </article>
+        <article class="suite">
+          <span class="tag">api</span>
+          <h3>API testing</h3>
+          <p>Fast, reliable checks at the service layer, where most bugs are cheapest to catch.</p>
+          <ul><li>REST API suites, run from the command line</li><li>Response schema validation</li><li>Auth, error and negative-path coverage</li></ul>
+          <span class="stack">Playwright · Postman CLI · REST Assured</span>
+        </article>
+        <article class="suite">
+          <span class="tag">pipeline</span>
+          <h3>CI/CD quality gates</h3>
+          <p>Tests that run on every pull request and block a merge when something breaks.</p>
+          <ul><li>PR smoke, nightly regression</li><li>Flaky test quarantine and reporting</li><li>Allure, ExtentReports or Playwright HTML reports on every run</li></ul>
+          <span class="stack">GitHub Actions · Azure DevOps · Allure</span>
+        </article>
+        <article class="suite">
+          <span class="tag">ai</span>
+          <h3>AI-assisted test engineering</h3>
+          <p>AI is not an add-on here. It is built into how your tests are written, run and kept up to date, with human review on every change.</p>
+          <ul><li>Agents and skills that draft and repair tests</li><li>MCP servers connecting AI tools to your test stack</li><li>Local models when code cannot leave your network</li></ul>
+          <span class="stack">Claude · GitHub Copilot · MCP · Ollama</span>
+        </article>
+        <article class="suite">
+          <span class="tag">performance</span>
+          <h3>Performance and load testing</h3>
+          <p>Find the breaking point before your users do, with thresholds you can enforce in CI.</p>
+          <ul><li>Load, stress and soak profiles</li><li>p95 / p99 latency budgets</li><li>Bottleneck analysis report</li></ul>
+          <span class="stack">Apache JMeter</span>
+        </article>
+        <article class="suite">
+          <span class="tag">strategy</span>
+          <h3>QA audit and test strategy</h3>
+          <p>A clear read on where your quality risk sits and what to automate first.</p>
+          <ul><li>Coverage and gap analysis</li><li>Flakiness root-cause review</li><li>Prioritized 90-day roadmap</li></ul>
+          <span class="stack">Risk-based testing · ISTQB practices · Shift-left</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="approach">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Approach</span>
+          <h2>Built on the test pyramid, not a pile of UI scripts.</h2>
+        </div>
+        <p>Suites that lean on slow end-to-end tests become flaky and expensive. I push each check down to the lowest layer that can catch the bug, so feedback stays fast.</p>
+      </div>
+
+      <div class="pyramid-wrap">
+        <div class="pyramid" role="img" aria-label="Target test mix: about 10 percent end-to-end UI tests, 30 percent API and integration tests, 60 percent unit and component tests">
+          <div class="tier ui"><b>E2E / UI</b><span>~10%</span></div>
+          <div class="tier api"><b>API &amp; integration</b><span>~30%</span></div>
+          <div class="tier unit"><b>Unit &amp; component</b><span>~60%</span></div>
+        </div>
+        <div class="pyramid-notes">
+          <div><h3>UI tests cover journeys, not fields</h3><p>A small set of end-to-end flows (sign-up, checkout, critical admin paths) that prove the system works together.</p></div>
+          <div><h3>API tests carry the business rules</h3><p>Validation, permissions and edge cases run in milliseconds against the service layer.</p></div>
+          <div><h3>Developers own the base</h3><p>I pair with your engineers on unit and component testing so coverage grows with every feature.</p></div>
+        </div>
+      </div>
+
+      <ol class="stages" style="margin-top:4rem">
+        <li><h3>Assess</h3><p>Review the product, current tests, pipeline and defect history, with AI mapping coverage gaps fast. Agree on risk areas.</p></li>
+        <li><h3>Stabilize</h3><p>Fix or quarantine flaky tests, using AI to trace failures to a root cause. Set up environments and test data you can trust.</p></li>
+        <li><h3>Automate</h3><p>Build coverage in priority order. AI agents draft and update tests; I review every change, and it merges through normal code review.</p></li>
+        <li><h3>Hand over</h3><p>Docs, walkthroughs and pairing, plus the AI agents and skills, so your team extends the suite at the same pace.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Selected work</span>
+          <h2>What this looks like on real projects.</h2>
+        </div>
+        <p>Client and employer names are left out. The problems and the work are real.</p>
+      </div>
+
+      <div class="cases">
+        <article class="case">
+          <span class="ctx">.NET product · Azure DevOps</span>
+          <h3>UI, API and load tests for a .NET product</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>Releases waited on long manual regression rounds, and nobody knew how the product behaved under load.</dd></div>
+            <div><dt>What I did</dt><dd>Built Selenium UI and RestAssured.Net API suites in C#, ran them in Azure DevOps pipelines with results in Azure Test Plans, and added Apache JMeter load tests for the busiest flows.</dd></div>
+          </dl>
+        </article>
+        <article class="case">
+          <span class="ctx">TypeScript product · GitHub Actions · sole SDET</span>
+          <h3>Playwright UI and API suite, as the only SDET</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>No dedicated QA engineer, and nothing checked pull requests before they merged.</dd></div>
+            <div><dt>What I did</dt><dd>Set up Playwright for UI and API tests in TypeScript, gated every pull request in GitHub Actions, and published an HTML report on each run.</dd></div>
+          </dl>
+        </article>
+        <article class="case">
+          <span class="ctx">AI-integrated testing</span>
+          <h3>AI agents inside the test workflow</h3>
+          <dl>
+            <div><dt>Challenge</dt><dd>Writing and maintaining tests took more time than the team had.</dd></div>
+            <div><dt>What I did</dt><dd>Built Claude agents, skills and MCP servers that draft and update tests in the suite's own style, with every change reviewed before it merged.</dd></div>
+          </dl>
+        </article>
+      </div>
+      <div class="selftest">
+        <div>
+          <span class="ctx">describe("this site")</span>
+          <h3>The site you are reading is tested the same way.</h3>
+          <p>Playwright tests on desktop and mobile, accessibility scans in light and dark mode, link and Lighthouse checks, and a CI gate: nothing deploys unless all of it passes.</p>
+        </div>
+        <div class="selftest-links">
+          <a class="btn primary" href="https://github.com/vipparla2002/sdet-services">See the tests and CI</a>
+          <a class="btn ghost" href="sample-audit.html">See a sample audit report</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="engagements">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Engagements</span>
+          <h2>Pick the shape that fits your team.</h2>
+        </div>
+        <p>Every engagement is scoped after a free 30-minute call and run remotely, the way I have worked for the last 2.5 years: your chat, tracker and repos, async updates, and agreed overlap hours. Fixed-price for audits and builds; monthly for embedded work.</p>
+      </div>
+
+      <div class="starter">
+        <div>
+          <span class="dur">1 week · fixed price</span>
+          <h3>Not ready for a big project? Start with a flaky test fix-up.</h3>
+          <p>I take your ten flakiest tests, find out why they fail, fix them, and leave a short note on how to stop it happening again.</p>
+        </div>
+        <div class="starter-cta">
+          <a class="btn primary" href="#contact" data-service="Flaky test fix-up">Start small</a>
+        </div>
+      </div>
+
+      <div class="plans">
+        <article class="plan">
+          <span class="dur">2 weeks</span>
+          <h3>Test audit</h3>
+          <p>An outside look at your quality setup with a concrete plan to fix it.</p>
+          <dl>
+            <div><dt>You get</dt><dd>Written findings, risk map, 90-day roadmap (<a href="sample-audit.html">see a sample</a>)</dd></div>
+            <div><dt>Best for</dt><dd>Teams with flaky suites or no automation yet</dd></div>
+          </dl>
+          <a class="btn ghost" href="#contact" data-service="QA audit">Ask about an audit</a>
+        </article>
+        <article class="plan featured">
+          <span class="dur">6–10 weeks</span>
+          <h3>Framework build</h3>
+          <p>A production-ready automation framework, wired into CI, covering your critical paths.</p>
+          <dl>
+            <div><dt>You get</dt><dd>Framework code, CI pipeline, reports, team training</dd></div>
+            <div><dt>Best for</dt><dd>Products heading for frequent releases</dd></div>
+          </dl>
+          <a class="btn primary" href="#contact" data-service="Framework build">Plan a build</a>
+        </article>
+        <article class="plan">
+          <span class="dur">Monthly</span>
+          <h3>Embedded SDET</h3>
+          <p>I join your sprints as part of the team: grooming, test design, automation and release sign-off.</p>
+          <dl>
+            <div><dt>You get</dt><dd>Part-time or full-time SDET capacity</dd></div>
+            <div><dt>Best for</dt><dd>Teams without a dedicated QA engineer, or a QA team that needs another pair of hands</dd></div>
+          </dl>
+          <a class="btn ghost" href="#contact" data-service="Embedded SDET">Discuss availability</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="tools">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Toolbelt</span>
+          <h2>I work in your stack.</h2>
+        </div>
+        <p>These are the tools I have shipped with, not a limit. Your stack is not listed? Not a blocker: page objects, fixtures, API checks and CI gates work the same in any framework, and AI-assisted engineering gets me productive in a new one within days.</p>
+      </div>
+      <div class="tools">
+        <div><h3>UI automation</h3><div class="chips"><span>Playwright</span><span>Selenium</span></div></div>
+        <div><h3>API</h3><div class="chips"><span>Playwright</span><span>Postman CLI</span><span>REST Assured</span><span>curl</span></div></div>
+        <div><h3>Performance</h3><div class="chips"><span>Apache JMeter</span></div></div>
+        <div><h3>Languages and runtimes</h3><div class="chips"><span>TypeScript</span><span>Python</span><span>C#</span><span>.NET</span><span>Node.js</span></div></div>
+        <div><h3>CI/CD</h3><div class="chips"><span>GitHub Actions</span><span>Azure DevOps</span></div></div>
+        <div><h3>Reporting</h3><div class="chips"><span>Allure</span><span>ExtentReports</span><span>Playwright HTML Reporter</span></div></div>
+        <div><h3>Test management</h3><div class="chips"><span>Azure Test Plans</span><span>Jira</span><span>Confluence</span></div></div>
+        <div><h3>AI engineering</h3><div class="chips"><span>Claude</span><span>Claude Artifacts</span><span>GitHub Copilot</span><span>MCP servers</span><span>Agents and skills</span><span>Ollama</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions teams usually ask first.</h2>
+        </div>
+        <p>Anything else, ask in the form below. I reply within one business day.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>How does remote work run day to day?</summary>
+          <p>The way I have worked for the last 2.5 years: in your chat (Slack or Teams), your tracker (Jira or Azure Boards) and your repositories. You get short written updates, and we agree a few overlap hours each day for calls and reviews.</p>
+        </details>
+        <details>
+          <summary>Which time zones do you work with?</summary>
+          <p>We fix the overlap hours on the first call. Most teams get three to four hours of shared working time each day, and the rest runs async.</p>
+        </details>
+        <details>
+          <summary>Our stack is not on your toolbelt. Is that a problem?</summary>
+          <p>Usually not. Page objects, fixtures, API checks and CI gates work the same way in any framework, and AI-assisted engineering gets me productive in a new one within days. If a stack is a poor fit, I will say so on the first call.</p>
+        </details>
+        <details>
+          <summary>How do you use AI, and does our code stay private?</summary>
+          <p>AI is part of how I write, run and maintain tests, and I review every change before it merges. I only use AI tools your company approves. If code cannot leave your network, I use local models through Ollama instead.</p>
+        </details>
+        <details>
+          <summary>Will our product details stay confidential?</summary>
+          <p>Yes. Nothing about your product, code or data is shared outside the engagement, and case studies never name clients.</p>
+        </details>
+        <details>
+          <summary>What access do you need?</summary>
+          <p>Usually the test repository, a test environment with test accounts, and the CI pipeline. Nothing in production unless you ask for it.</p>
+        </details>
+        <details>
+          <summary>Can you join our existing QA team?</summary>
+          <p>Yes. I have worked as the only SDET on a project and as part of a QA team, so I can lead the automation or fit into how your team already works.</p>
+        </details>
+        <details>
+          <summary>What happens when the engagement ends?</summary>
+          <p>You own all the code, documentation and pipelines. Handover includes walkthroughs and pairing, so your team can run and extend the suite without me.</p>
+        </details>
+        <details>
+          <summary>How does payment work?</summary>
+          <p>Fixed-price work is split into milestones agreed in the proposal. Embedded work is invoiced monthly. Currency and payment method are agreed in the proposal too.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap contact">
+      <div class="side">
+        <span class="eyebrow">expect(project).toShip()</span>
+        <h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:700;line-height:1.1">Tell me what you are testing.</h2>
+        <p>Share a few details and I will reply within one business day with questions or a short proposal. The first call is free.</p>
+        <ol class="next">
+          <li><span><b>You send your request.</b> The form opens your email app with it written out.</span></li>
+          <li><span><b>I reply within one business day</b> with questions or a time for a call.</span></li>
+          <li><span><b>A free 30-minute call</b> to understand the product and agree the scope.</span></li>
+          <li><span><b>A written proposal</b> with scope, timeline and a fixed price or monthly rate.</span></li>
+        </ol>
+      </div>
+
+      <!-- Left empty, submitting opens the visitor's email app with the request written out (address in assets/main.js). Set data-endpoint to a Formspree form URL (https://formspree.io/f/...) to send it from the page instead. -->
+      <form class="brief" id="brief" data-endpoint="" novalidate>
+        <div class="row2">
+          <label for="name">Name<input id="name" name="name" type="text" autocomplete="name" required></label>
+          <label for="company">Company<input id="company" name="company" type="text" autocomplete="organization"></label>
+        </div>
+        <label for="workEmail">Work email<input id="workEmail" name="email" type="email" autocomplete="email" required></label>
+        <fieldset>
+          <legend>What do you need?</legend>
+          <div class="checks">
+            <label><input type="checkbox" id="svc-ui" name="svc" value="UI automation">UI automation</label>
+            <label><input type="checkbox" id="svc-api" name="svc" value="API testing">API testing</label>
+            <label><input type="checkbox" id="svc-ci" name="svc" value="CI/CD gates">CI/CD gates</label>
+            <label><input type="checkbox" id="svc-perf" name="svc" value="Performance">Performance</label>
+            <label><input type="checkbox" id="svc-ai" name="svc" value="AI-assisted testing">AI-assisted testing</label>
+            <label><input type="checkbox" id="svc-audit" name="svc" value="QA audit">QA audit</label>
+            <label><input type="checkbox" id="svc-flaky" name="svc" value="Flaky test fix-up">Flaky test fix-up</label>
+            <label><input type="checkbox" id="svc-fw" name="svc" value="Framework build">Framework build</label>
+            <label><input type="checkbox" id="svc-embed" name="svc" value="Embedded SDET">Embedded SDET</label>
+          </div>
+        </fieldset>
+        <label for="timeline">Timeline
+          <select id="timeline" name="timeline">
+            <option>As soon as possible</option>
+            <option>Within a month</option>
+            <option>Next quarter</option>
+            <option>Just exploring</option>
+          </select>
+        </label>
+        <label for="details">Project details<textarea id="details" name="details" placeholder="Product type, current test setup, what keeps breaking…"></textarea></label>
+        <!-- Honeypot: hidden from people, filled in by spam bots. -->
+        <label class="hp" aria-hidden="true">Leave this empty<input id="website" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></label>
+        <button class="btn primary" type="submit" id="submitBrief" style="justify-self:start">Email my request</button>
+        <div class="result" id="result" role="status" aria-live="polite" hidden></div>
+        <p class="fine">Opens your email app with the request written out, ready to send. Your details are only used to reply. <a href="#privacy">Privacy</a></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="block privacy" id="privacy">
+    <div class="wrap">
+      <h2>Privacy</h2>
+      <p>This site sets no cookies, shows no ads and loads its fonts and files from this site only.</p>
+      <p id="privacyMail">The contact form sends nothing through this site. It opens your own email app with your request written out, and you decide whether to send it.</p>
+      <p id="privacyForm" hidden>When you send the contact form, your name, company, email and project details are delivered to me through <a href="https://formspree.io/legal/privacy-policy">Formspree</a>, a form-handling service. I use them only to reply to you and do not share them. Email me any time to have them deleted.</p>
+      <p id="privacyAnalytics" hidden>Visit counts come from <a href="https://www.cloudflare.com/web-analytics/">Cloudflare Web Analytics</a>, which records page views without cookies or anything that identifies you.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Greenbar Quality Engineering</span>
+    <nav class="elsewhere" aria-label="Elsewhere">
+      <a href="https://github.com/vipparla2002" rel="me">GitHub</a>
+      <a href="#privacy">Privacy</a>
+    </nav>
+    <span class="mono">0 failed · 0 flaky · ready to ship</span>
+  </div>
+</footer>
+
+<script src="assets/main.js" defer></script>
+</body>
+</html>
