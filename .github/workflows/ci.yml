@@ -62,11 +62,12 @@ jobs:
             exit 1
           fi
       # Broken links fail the build. The site's own absolute URLs are skipped (they only exist after deploy).
+      # --index-files resolves directory links like ./#contact to index.html, as Pages does.
       - name: Check links
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
-            --no-progress --include-fragments
+            --no-progress --include-fragments --index-files index.html
             --exclude '^${{ steps.assemble.outputs.url }}'
             --exclude 'github\.com/your-username'
             '_site/**/*.html'
